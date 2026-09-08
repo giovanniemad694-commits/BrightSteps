@@ -1,0 +1,25 @@
+{
+  "name": "BrightSteps — Family Rewards",
+  "short_name": "BrightSteps",
+  "description": "Small steps. Big celebrations. A family rewards and responsibility platform for kids.",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f5f7fb",
+  "theme_color": "#4c7ff0",
+  "categories": ["family", "education", "productivity"],
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
