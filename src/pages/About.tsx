@@ -1,0 +1,10 @@
+import { BookOpen, Target, GraduationCap, Search, Info, ShieldCheck } from 'lucide-react';
+import { useLanguage } from '@/contexts/LanguageContext';
+import { useReveal } from '@/hooks/useReveal';
+
+export default function About() {
+  const { t } = useLanguage();
+  const { ref, visible } = useReveal<HTMLDivElement>();
+  const sections = [{ icon: BookOpen, title: t('about.what'), text: t('about.what_text') }, { icon: Target, title: t('about.why'), text: t('about.why_text') }, { icon: GraduationCap, title: t('about.importance'), text: t('about.importance_text') }, { icon: Search, title: t('about.how'), text: t('about.how_text') }];
+  return <div className="min-h-screen archive-grid px-4 py-16 sm:px-6 lg:px-8"><div className="mx-auto max-w-4xl"><div className="mb-14 text-center"><ShieldCheck className="mx-auto mb-5 h-9 w-9 text-[#c6a15b]" /><p className="mb-3 text-xs uppercase tracking-[0.25em] text-[#c6a15b]">The story behind the archive</p><h1 className="text-5xl font-bold text-[var(--ink)] md:text-6xl">{t('about.title')}</h1><div className="mx-auto mt-6 h-1 w-20 bg-[#c6a15b]" /></div><div ref={ref} className={`space-y-6 reveal ${visible ? 'is-visible' : ''}`}>{sections.map((section, i) => <article key={section.title} className="archive-surface rounded-2xl p-7 transition-transform duration-300 hover:-translate-y-1" style={{ transitionDelay: `${i * 70}ms` }}><div className="flex items-start gap-4"><div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-[#c6a15b]/35 bg-[#762525]/15"><section.icon className="h-6 w-6 text-[#c6a15b]" /></div><div><h2 className="mb-3 text-2xl font-bold text-[var(--ink)]">{section.title}</h2><p className="leading-9 text-[var(--ink-soft)]">{section.text}</p></div></div></article>)}<div className="flex items-start gap-3 rounded-2xl border border-[#c6a15b]/35 bg-[#c6a15b]/10 p-6"><Info className="mt-1 h-6 w-6 shrink-0 text-[#c6a15b]" /><p className="text-sm leading-8 text-[var(--ink-soft)]">{t('about.disclaimer')}</p></div></div></div></div>;
+}

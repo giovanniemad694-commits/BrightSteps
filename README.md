@@ -1,117 +1,138 @@
-# BrightSteps — Family Rewards PWA
+# بطاركة حافظوا على الإيمان | Coptic Patriarchs Archive
 
-BrightSteps is a family-first task and rewards web app for parents and children. It supports points, EGP allowance tracking, screen-time rewards, custom rewards, task approval workflow, reward redemption, achievements, streaks, levels, English/Arabic with RTL, and a touch-friendly mobile-first interface.
+أرشيف توثيقي لسير بطاركة الكنيسة القبطية الأرثوذكسية ودورهم في الحفاظ على الإيمان.
 
-Built as a **Progressive Web App (PWA)** — installable on Android Chrome via "Add to Home Screen" with offline support.
+A documentary archive of Coptic Orthodox Patriarchs who preserved and defended the Christian faith.
 
 ## Features
 
-### Parent
-- Create a family and add children
-- Create tasks with categories, frequency, deadlines, difficulty, icons, and reward types
-- Approve or reject completed tasks (rewards auto-granted on approval)
-- Approve or reject reward redemption requests (points auto-deducted on approval)
-- View family overview, child progress, and transaction history
-- Manage family settings (notifications, language, appearance)
-
-### Child
-- View assigned tasks and complete them for parent approval
-- Browse the reward store and request rewards
-- View points, money balance, screen time, and streak
-- Track XP, levels, and achievements
-- View transaction history
-- Switch between child profiles
-
-### Core Workflow
-1. Parent creates a task and assigns it to a child
-2. Child completes the task → status becomes "Waiting for Approval"
-3. Parent approves → reward (points/money/screen time) is automatically granted
-4. Child's balance updates in real-time
-5. Child opens Reward Store and requests a reward
-6. Parent approves → points are deducted, transaction recorded in history
-
-### Rewards
-- **Points**: e.g. Clean room → +20 points
-- **Money**: Parent-managed allowance only (no banking/payments)
-- **Screen Time**: e.g. +30 minutes TV
-- **Custom Rewards**: e.g. Ice cream, movie night, choose dinner
-
-### Gamification
-- XP and levels: Beginner → Helper → Super Helper → Family Hero → Champion
-- Achievements: First Task, 10 Tasks, 7-Day Streak, Homework Hero, Reading Star, Helpful Family Member
-- Progress bars and positive messaging (no guilt-based mechanics)
-
-### Languages
-- English and Arabic with full RTL support
-- Language preference persists across sessions
-
-### PWA
-- Web App Manifest with standalone display mode
-- Service Worker for offline shell caching
-- Installable on Android Chrome via "Add to Home Screen"
-- App icons (192px and 512px)
-- Offline-friendly: cached data visible when disconnected
+- Browse patriarchs with beautiful cards
+- Search by name (Arabic or English) or biography text
+- Filter by century and sort by papal number, century, or name
+- Detailed biography pages with timeline, events, sources, and "How He Preserved the Faith" section
+- Historical timeline page showing all patriarchs chronologically
+- About page explaining the project
+- Admin dashboard (login required) to add, edit, and delete patriarchs, events, and sources
+- Bilingual: Arabic (RTL) and English (LTR) with language switcher
+- Responsive design for desktop, tablet, and mobile
+- Built with React + TypeScript + Vite + Tailwind CSS + Supabase
 
 ## Tech Stack
 
-- **React 18** with TypeScript
-- **Vite** for build tooling
-- **Supabase** for database, auth, and row-level security
-- **Tailwind CSS** for styling
-- **Lucide React** for icons
+- **React** + **TypeScript** — Frontend framework
+- **Vite** — Build tool and dev server
+- **Tailwind CSS** — Styling
+- **Supabase** — Database (PostgreSQL) and Auth
+- **react-router-dom** — Routing
+- **lucide-react** — Icons
 
-## Database & Security
+## Setup Instructions
 
-The Supabase database includes: families, children, tasks, task_completions, rewards, reward_redemptions, points_transactions, money_transactions, screen_time_transactions, achievements, child_achievements, notifications, and family_settings.
-
-### Row-Level Security (RLS)
-- Every table has RLS enabled
-- Parents can only access their own family's data (verified via `families.created_by = auth.uid()`)
-- Children cannot modify their own balance, approve tasks, or modify rewards
-- Server-side `SECURITY DEFINER` functions handle task approval and reward redemption atomically, ensuring balance changes only happen through verified parent approval
-
-## Local Development
+### 1. Install Dependencies
 
 ```bash
 npm install
+```
+
+### 2. Create a Supabase Project
+
+1. Go to [supabase.com](https://supabase.com) and sign up / log in
+2. Click "New Project" and fill in the details
+3. Wait for the project to be created
+
+### 3. Create the Database Tables
+
+1. In your Supabase dashboard, go to **SQL Editor**
+2. Click **New Query**
+3. Copy the entire contents of `supabase/schema.sql` from this project
+4. Paste it into the SQL editor and click **Run**
+5. This creates three tables: `patriarchs`, `patriarch_events`, `patriarch_sources`
+
+### 4. Add Environment Variables
+
+1. In your Supabase dashboard, go to **Settings → API**
+2. Copy your **Project URL** and **anon public key**
+3. Create a `.env` file in the project root (copy from `.env.example`):
+
+```
+VITE_SUPABASE_URL=your_project_url_here
+VITE_SUPABASE_ANON_KEY=your_anon_key_here
+```
+
+### 5. Create an Admin User (for the admin dashboard)
+
+1. In your Supabase dashboard, go to **Authentication → Users**
+2. Click **Add User** and enter an email and password
+3. Use these credentials to log in at `/admin`
+
+### 6. Run Locally
+
+```bash
 npm run dev
 ```
 
-The Supabase connection details are pre-configured in `.env`.
+The site will be available at `http://localhost:5173`
 
-## Production Build
+### 7. Build for Production
 
 ```bash
-npm install
 npm run build
 ```
 
-The build output is in the `dist/` directory. The app can be deployed to any static hosting platform that supports HTTPS (required for service workers and PWA features).
+This creates a `dist/` folder with the production build.
 
-## Deployment
+### 8. Deploy to Vercel
 
-### Option 1: Netlify
-1. Run `npm run build`
-2. Drag the `dist/` folder to Netlify's deploy dashboard
-3. Or connect your Git repository and set build command to `npm run build` with publish directory `dist`
+1. Push your project to GitHub
+2. Go to [vercel.com](https://vercel.com) and sign in
+3. Click **New Project** and import your GitHub repository
+4. In the environment variables section, add:
+   - `VITE_SUPABASE_URL` = your Supabase URL
+   - `VITE_SUPABASE_ANON_KEY` = your Supabase anon key
+5. Click **Deploy**
+6. Your site will be live!
 
-### Option 2: Vercel
-1. Install Vercel CLI: `npm i -g vercel`
-2. Run `vercel` in the project root
-3. The build command and output directory are auto-detected
+## Project Structure
 
-### Option 3: Any static host (Cloudflare Pages, GitHub Pages, etc.)
-1. Run `npm run build`
-2. Upload the contents of `dist/` to your hosting provider
-3. Ensure HTTPS is enabled (required for service workers)
+```
+src/
+├── components/       # Reusable UI components
+│   ├── Navbar.tsx
+│   ├── Footer.tsx
+│   ├── PatriarchCard.tsx
+│   ├── PatriarchImage.tsx
+│   ├── SearchBar.tsx
+│   ├── FilterBar.tsx
+│   ├── PatriarchTimeline.tsx
+│   ├── EventTimeline.tsx
+│   ├── SourceList.tsx
+│   ├── LoadingState.tsx
+│   ├── EmptyState.tsx
+│   └── ErrorState.tsx
+├── contexts/         # React contexts
+│   └── LanguageContext.tsx
+├── hooks/            # Custom hooks for data fetching
+│   └── usePatriarchs.ts
+├── lib/              # Configuration
+│   └── supabase.ts
+├── pages/            # Page components
+│   ├── Home.tsx
+│   ├── Patriarchs.tsx
+│   ├── PatriarchDetails.tsx
+│   ├── Timeline.tsx
+│   ├── About.tsx
+│   └── Admin.tsx
+├── types/            # TypeScript type definitions
+│   └── index.ts
+├── App.tsx           # Main app with routing
+├── main.tsx          # Entry point
+└── index.css         # Global styles
+```
 
-### Environment Variables
-The following are pre-configured in `.env`:
-- `VITE_SUPABASE_URL` — Supabase project URL
-- `VITE_SUPABASE_ANON_KEY` — Supabase anonymous key
+## Notes
 
-No additional configuration is needed for deployment.
-
-## Demo Mode
-
-The app includes a "Try demo family" option on the welcome screen that loads sample data (Ahmed Family with children Adam and Jana, sample tasks and rewards) without requiring an account or database connection.
+- This is an educational documentary project for a computer competition.
+- Information is sourced from historical references including the History of the Patriarchs by Severus ibn al-Muqaffa, the Coptic Synaxarium, and ecumenical council records.
+- Some dates are approximate (marked with "حوالي" / "circa") as exact historical dates are not always known.
+- The database is pre-seeded with 10 well-known Coptic patriarchs. Admins can add more through the admin dashboard.
+- Never expose the Supabase service role key in frontend code. Only use the anon key.
